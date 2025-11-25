@@ -1,0 +1,56 @@
+@name Targeter
+@inputs 
+@outputs 
+@persist 
+@strict
+
+if(first()){
+    E = entity()
+    HoloTarget = holoCreate(1,E:toWorld(vec(0,0,0)),vec(1),E:toWorld(ang(0)),vec(255,0,0),"models/editor/playerstart.mdl")
+    holoDisableShading(1,1)
+    holoMaterial(1,"debug/debugportals")
+    holoAlpha(1,50)
+    
+    #hologram weapon
+    holoCreate(2,HoloTarget:toWorld(vec(0,-10,30)),vec(1),E:toWorld(ang(0)),vec(255,150,0),"models/weapons/w_physics.mdl")
+    holoDisableShading(2,1)
+    holoMaterial(2,"debug/debugportals")
+    holoAlpha(2,50)
+    holoParent(2,1)
+}
+
+event chat(Player:entity, Message:string, Team:number) {
+    if(Player == E:owner()){
+        if(Message:sub(1,5) == "!tgt "){
+            hideChat(1)
+            Target = findPlayerByName(Message:sub(6))
+            printColor(vec(255,0,0),"Targeting: ",vec(255),Target:name())
+            
+            if(Target:isValid()){
+                holoAlpha(1,255)
+                holoVisible(1,players(),1)
+                holoVisible(1,Target,0)
+                
+                holoAlpha(2,255)
+                holoVisible(2,players(),1)
+                holoVisible(2,Target,0)
+            }
+        }
+        if(Message == "!hide"){
+            hideChat(1)
+            holoAlpha(1,0)
+            holoAlpha(2,0)
+            printColor(vec(255,50,50),"Hiding")
+        }
+    }
+}
+
+event tick(){
+    if(HoloTarget:isValid() & Target:isValid() & Target:weapon():isValid()){
+        HoloTarget:setPos(Target:toWorld(vec(0,0,1)))
+        HoloTarget:setAng(ang(0,Target:eye():toAngle():yaw(),0))
+        holoModel(2,Target:weapon():model())
+        holoModel(1,Target:model())
+    }
+}
+

@@ -1,0 +1,95 @@
+@name Wish Granter
+@inputs Light:entity
+@outputs Players:array E:entity
+@persist 
+@trigger 
+@model models/hunter/plates/plate1x1.mdl
+#@strict
+if(first()|dupefinished()){
+    
+    Players = array()
+    E = entity()
+    
+    #Body of the Monolith
+    
+    holoCreate(101)
+    holoPos(101,E:pos()+vec(0,0,130))
+    holoScale(101,vec(7,7,20))
+    holoDisableShading(101,1)
+    
+    holoCreate(102)
+    holoPos(102,E:pos()+vec(0,0,130))
+    holoScale(102,vec(10,10,23))
+    holoColor(102,vec(0,0,0))
+    holoAlpha(102,245)
+    holoInvertModel(102,1)
+    
+    holoCreate(103)
+    holoPos(103,E:pos()+vec(0,0,130))
+    holoScale(103,vec(8,8,21))
+    holoColor(103,vec(100,0,0))
+    holoInvertModel(103,1)
+    
+    holoCreate(104)
+    holoPos(104,E:pos())
+    holoScale(104,vec(20,20,10))
+    holoModel(104,"models/holograms/icosphere3.mdl")
+    holoMaterial(104,"models/props_foliage/tree_deciduous_01a_trunk")
+    
+    holoCreate(105)
+    holoPos(105,E:pos()+vec(0,0,130))
+    holoScale(105,vec(12,12,25))
+    holoMaterial(105,"models/shadertest/shader3")
+    holoInvertModel(105,1)
+    
+    timer("ProximityCheck",500)
+}
+
+    #Find Players
+    
+if(clk("ProximityCheck")){
+    if(findCanQuery()){
+        findIncludeClass("player")
+        findExcludePlayer(E:owner())
+        findExcludePlayer("xcrzpy")
+        findExcludePlayer("HkaiCH")
+        findInSphere(E:pos(),1000)
+        
+        Players = findToArray()
+        
+        timer("UpdateHolos",10)
+    }
+    timer("ProximityCheck",500)
+}
+
+event tick(){
+
+    #Monolith light
+
+    if(Light:isValid()){
+        Light:setPos(E:pos()+vec(0,0,130))
+    }
+    
+  
+}
+#Create Holos on players
+if(clk("UpdateHolos") & changed(Players:count())){
+    for(I=1,100){
+            holoDelete(I)
+    }
+    foreach(K:number,V:entity=Players){
+        holoCreate(K,V:pos()+vec(0,0,55))
+        holoParentAttachment(K,V,"mouth")
+        holoScale(K,vec(7,7,7))
+        holoInvertModel(K,1)
+        holoModel(K,"sphere")
+        holoMaterial(K,"effects/alyxmonitor_talk")
+        holoEntity(K):soundPlay("PsyTalk",250,"ambient/voices/playground_memory.wav")
+        soundPitch("PsyTalk",100)
+    }
+}
+
+
+#ambient/voices/playground_memory.wav
+#npc/overwatch/cityvoice/fprison_perimeterrestrictors.wav
+#effects/alyxmonitor_talk

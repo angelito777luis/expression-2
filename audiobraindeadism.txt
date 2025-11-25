@@ -1,0 +1,31 @@
+@name misc/audiobraindeadism
+@inputs 
+@outputs 
+@persist 
+@strict
+
+if(first()){
+    
+    Speed = 50
+    Lenght = 100
+    
+    Holos = array()
+    
+    foreach(K:number,V:entity = players()){
+        local H = holoCreate(K,V:massCenter())
+        holoParent(K,V)
+        holoAlpha(K,0)
+        holoEntity(K):soundPlay(K,0,"weapons/physgun_off.wav")
+        soundLevel(K,999)
+        Holos:pushEntity(H)
+    }
+}
+
+event tick(){
+    
+    Cos = cos(curtime()*Speed)*Lenght
+    
+    foreach(K:number,_:entity = Holos){
+        soundPitch(K,155+Cos)
+    }
+}
