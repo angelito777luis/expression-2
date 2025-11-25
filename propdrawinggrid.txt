@@ -4,6 +4,9 @@
 @persist 
 @strict
 
+#Hardcoded to work with 256 blocks, i do not advice changing NumberOfProps var
+#Spawn an EGP HUD and use it, the box in the corner of the screen should have instructions
+
 if(first()){
     O = owner()
     propSpawnUndo(0)
@@ -105,7 +108,6 @@ if(EGP:entity():isValid()){
 
 event tick() {
     if(EGP:entity():isValid()){
-        #"angel_custom/beelSpriteAnim"
         EGP:egpBox(1,egpScrSize(owner())/vec2(10,3),vec2(250))
         EGP:egpAlpha(1,200)
         EGP:egpColor(1,vec(0))
@@ -128,9 +130,6 @@ event tick() {
         EGP:egpText(6,"Preset Colors: !wht, !blk",egpScrSize(owner())/vec2(60,3.5))
         EGP:egpColor(6,vec(100,0,200))
         EGP:egpSize(6,17)
-        
-        EGP:egpBox(7,egpScrSize(owner())/vec2(10,2.4),vec2(125))
-        EGP:egpMaterial(7,"angel_custom/beelSpriteAnim")
     }
 }
 
