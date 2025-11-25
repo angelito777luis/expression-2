@@ -1,0 +1,32 @@
+@name Toggler Binary
+@inputs [Screen1 Screen2]:entity
+@outputs 
+@persist 
+@strict
+
+if(first()){
+    Screen = 0
+}
+if(Screen1:isValid() & Screen2:isValid()){
+    Screen2:setAlpha(0)
+    Screen2:propNotSolid(1)
+    Screen2:setPos(Screen1:pos())
+    Screen2:setAng(Screen1:angles())
+    Screen2:parentTo(Screen1)
+}
+
+event playerUse(Player:entity, Entity:entity) {
+    if(Entity == Screen1 |Entity == Screen2){
+        Screen = !Screen
+        if(Screen == 1){
+            Screen1:soundPlay(1,0.1,"buttons/blip1.wav")
+            Screen1:setAlpha(0)
+            Screen2:setAlpha(255)
+        }
+        elseif(Screen == 0){
+            Screen1:soundPlay(1,0.1,"buttons/blip1.wav")
+            Screen1:setAlpha(255)
+            Screen2:setAlpha(0)
+        }
+    }
+}
