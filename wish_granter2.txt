@@ -5,6 +5,10 @@
 @trigger 
 @model models/hunter/plates/plate1x1.mdl
 #@strict
+
+#Will put a holo over anyone who dares to get close enough to the monolith
+#Thanks to xCrzpy- for helping me make 80% of this 
+
 if(first()|dupefinished()){
     
     Players = array()
