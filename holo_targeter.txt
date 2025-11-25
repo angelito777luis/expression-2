@@ -4,6 +4,9 @@
 @persist 
 @strict
 
+#type in chat !tgt "playername" to spawn a pm holo and a weapon holo over a player that they cannot see.
+#(often) works through walls
+
 if(first()){
     E = entity()
     HoloTarget = holoCreate(1,E:toWorld(vec(0,0,0)),vec(1),E:toWorld(ang(0)),vec(255,0,0),"models/editor/playerstart.mdl")
